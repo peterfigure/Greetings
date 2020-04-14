@@ -1,10 +1,10 @@
 Simple sample app using 
-* Kotlin
-* Arrow
-* Spring Boot
-* Jooq
-* Rest Assured
-* SpringMockk  
+* Kotlin https://kotlinlang.org/ 
+* Arrow https://arrow-kt.io/
+* Spring Boot https://spring.io/projects/spring-boot
+* Jooq https://www.jooq.org/
+* Rest Assured https://github.com/rest-assured/rest-assured/
+* SpringMockk https://github.com/Ninja-Squad/springmockk 
 
 It illustrates a more functional approach to the common Controller/Service/Persistence web application. 
  
@@ -21,7 +21,8 @@ Allows us to easily represent constants (mostly for plugin & dependency version 
 , search for dependency usage etc.  
 
 # Running the App
-
-* docker-compose up -d
-* ./gradlew generateGreetingJooqSchemaSource
-* ./gradlew bootRun
+```
+ docker-compose up -d
+ ./gradlew generateGreetingJooqSchemaSource
+ ./gradlew bootRun
+``` 
