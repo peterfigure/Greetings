@@ -1,0 +1,62 @@
+def dbPassword = "postgres"
+
+flyway {
+    url = 'jdbc:postgresql://127.0.0.1:5432/greetingdb'
+    driver = 'org.postgresql.Driver'
+    user = 'postgres'
+    password = dbPassword
+    schemas = ['greeting']
+    locations = ["filesystem:${projectDir}/src/main/resources/db/migration", 'db/migration']
+    validateOnMigrate = false
+    outOfOrder = true
+}
+
+// ideally this should be in "generated-src/java" (supported in IDEA module too: https://docs.gradle.org/current/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html)
+def generatedDir = 'src/main/java'
+def fullDir = "${generatedDir}/com/example/greeting/jooq/generated"
+def generatedPackage = 'com.example.greeting.jooq.generated'
+
+jooq {
+    greeting(sourceSets.main) {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:postgresql://localhost:5432/greetingdb'
+            user = 'postgres'
+            password = dbPassword
+        }
+        generator {
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                inputSchema = 'greeting'
+                includes = '.*'
+                excludes = 'flyway_schema_history'
+                outputSchemaToDefault = true
+            }
+            generate {
+                relations = true
+                deprecated = false
+                records = true
+                immutablePojos = false
+                fluentSetters = true
+                generatedAnnotation = false
+                instanceFields = true
+                daos = true
+                javaTimeTypes = true
+            }
+            target {
+                packageName = "${generatedPackage}"
+                directory = "${generatedDir}"
+            }
+        }
+    }
+}
+
+generateGreetingJooqSchemaSource.doFirst {
+    project.file(fullDir).deleteDir()
+}
+
+// Use flyway first to ensure up to date schema
+generateGreetingJooqSchemaSource.dependsOn flywayMigrate
+
+// Don't automatically run
+project.tasks.getByName('compileJava').dependsOn -= 'generateGreetingJooqSchemaSource'

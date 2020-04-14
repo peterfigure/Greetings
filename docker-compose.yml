@@ -1,0 +1,18 @@
+version: "3.4"
+services:
+  postgres:
+    image: postgres:9.6-alpine
+    container_name: greeting_postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: greetingdb
+
+  adminer:
+    image: adminer
+    container_name: greeting_adminer
+    restart: always
+    ports:
+      - 8085:8080
