@@ -25,7 +25,7 @@ class GreetingRepositoryImpl(
     return dbFindOperation(id, {
       // we expect a greeting so we treat a missing greeting as an error (ie jooq returns null), so make it an Option first
       Option
-        .fromNullable(greetingDao.fetchOneById(id))
+        .fromNullable(greetingDao.fetchOneById(id.id))
         .map { it.toInternalGreeting() }
     })
   }
